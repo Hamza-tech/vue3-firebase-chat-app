@@ -1,20 +1,25 @@
 import { defineStore } from "pinia";
-import { getAuth, type User } from "firebase/auth";
+import { ref } from "vue";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
-export const useAppStore = defineStore("app", {
-  state: () => ({
-    user: null as User | null,
-  }),
-  actions: {
-    setUser(user: User | null) {
-      this.user = user;
-    },
-    clearUser() {
-      this.user = null;
-    },
-    async fetchUser() {
-      const auth = getAuth();
-      this.user = auth.currentUser;
-    },
-  },
+export const useAppStore = defineStore("app", () => {
+  const user = ref<User | null>(null);
+
+  function setUser(newUser: User | null) {
+    user.value = newUser;
+  }
+
+  function clearUser() {
+    user.value = null;
+  }
+
+  async function fetchUser() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (firebaseUser) => {
+      console.log("Fetched user:", firebaseUser);
+      user.value = firebaseUser;
+    });
+  }
+
+  return { user, setUser, clearUser, fetchUser };
 });

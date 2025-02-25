@@ -5,28 +5,33 @@
       <div v-if="store.user">
         <Navbar />
         <main class="pt-20">
-         <router-view />
+          <RouterView />
         </main>
       </div>
-      <router-view v-else />
+      <div v-else>
+        <RouterView />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import Navbar from "@/components/Navbar.vue";
+import { defineComponent, onMounted } from "vue";
 import { useAppStore } from "@/stores/store";
+import Navbar from "@/components/Navbar.vue";
 
 export default defineComponent({
   components: {
-    Navbar
+    Navbar,
   },
   setup() {
     const store = useAppStore();
-    return {
-      store,
-    };
+
+    onMounted(() => {
+      store.fetchUser();
+    });
+
+    return { store };
   },
 });
 </script>
