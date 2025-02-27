@@ -36,3 +36,24 @@ export const listenForMessages = (userId1, userId2, callback) => {
     callback(messages);
   });
 };
+
+export const sendGeneralMessage = async (user, message) => {
+  try {
+    await addDoc(collection(db, "general_chat"), {
+      uid: user.uid,
+      email: user.email,
+      message: message,
+      timestamp: serverTimestamp(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const  listenGeneralMessage = (callback) => {
+  const q = query(collection(db, "general_chat"), orderBy("timestamp","asc"));
+  return onSnapshot(q, (snapshot) => {
+    const messages = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    callback(messages);
+  });
+}
