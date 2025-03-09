@@ -13,11 +13,6 @@
           </RouterLink>
         </li>
         <li>
-          <RouterLink to="/profile" class="text-white hover:text-gray-200 transition duration-300">
-            Profile
-          </RouterLink>
-        </li>
-        <li>
           <RouterLink to="/chat" class="text-white hover:text-gray-200 transition duration-300">
             Chats
           </RouterLink>
